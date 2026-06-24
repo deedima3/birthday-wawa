@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Wawa!</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Nunito:wght@300;400;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --pink-50: #fdf2f8;
+  --pink-100: #fce7f3;
+  --pink-200: #fbcfe8;
+  --pink-300: #f9a8d4;
+  --pink-400: #f472b6;
+  --pink-500: #ec4899;
+  --pink-600: #db2777;
+  --pink-700: #be185d;
+  --pink-800: #9d174d;
+  --pink-900: #831843;
+  --cream: #fff5f5;
+  --white: #ffffff;
+  --gold: #fbbf24;
+  --shadow: rgba(219, 39, 119, 0.15);
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: linear-gradient(135deg, var(--pink-100) 0%, #ffe4ec 30%, var(--cream) 60%, #ffe4ec 100%);
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+  background-attachment: fixed;
+}
+
+/* Floating sparkles & hearts */
+.sparkle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+  animation: floatUp 6s ease-in-out infinite;
+  opacity: 0;
+  font-size: 1.5rem;
+}
+@keyframes floatUp {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 0.6; }
+  100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+}
+
+/* ENVELOPE CONTAINER */
+.envelope-scene {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.envelope-hint {
+  font-family: 'Caveat', cursive;
+  font-size: 1.5rem;
+  color: var(--pink-600);
+  text-align: center;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+@media (min-width: 600px) { .envelope-hint { font-size: 2rem; } }
+
+.envelope {
+  position: relative;
+  width: 280px;
+  height: 200px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.envelope:hover { transform: scale(1.05); }
+@media (min-width: 600px) { .envelope { width: 380px; height: 260px; } }
+
+.envelope-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 65%;
+  background: linear-gradient(135deg, var(--pink-400), var(--pink-500));
+  border-radius: 0 0 12px 12px;
+  clip-path: polygon(0 0, 50% 28%, 100% 0, 100% 100%, 0 100%);
+  box-shadow: 0 8px 30px var(--shadow);
+}
+
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(135deg, var(--pink-500), var(--pink-600));
+  clip-path: polygon(0 0, 50% 100%, 100% 0);
+  transform-origin: top center;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 3;
+  box-shadow: 0 4px 15px var(--shadow);
+}
+.envelope.open .envelope-flap {
+  transform: rotateX(180deg);
+}
+
+.envelope-seal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  background: var(--gold);
+  border-radius: 50%;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+@media (min-width: 600px) { .envelope-seal { width: 60px; height: 60px; font-size: 2rem; } }
+.envelope.open .envelope-seal {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.5);
+}
+
+.envelope-front-lines {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 65%;
+  z-index: 2;
+  pointer-events: none;
+}
+.envelope-front-lines::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 2px;
+  background: rgba(255,255,255,0.3);
+}
+
+/* LETTER / CARD */
+.letter {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  width: 88%;
+  background: var(--white);
+  border-radius: 8px;
+  padding: 1.5rem;
+  z-index: 1;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1) 0.6s, opacity 0.8s ease 0.6s;
+  opacity: 0;
+  font-family: 'Caveat', cursive;
+  font-size: 1.2rem;
+  color: var(--pink-700);
+  text-align: center;
+  line-height: 1.6;
+}
+.envelope.open .letter {
+  transform: translateX(-50%) translateY(-120%);
+  opacity: 1;
+}
+@media (min-width: 600px) { .letter { width: 90%; font-size: 1.4rem; } }
+
+/* MAIN CONTENT (revealed after envelope) */
+.main-content {
+  display: none;
+  width: 100%;
+  max-width: 1100px;
+  padding: 2rem 1rem;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+.main-content.revealed {
+  display: block;
+  animation: fadeInUp 0.8s ease forwards;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.title {
+  font-family: 'Caveat', cursive;
+  font-size: 2.5rem;
+  color: var(--pink-600);
+  margin-bottom: 0.3rem;
+}
+@media (min-width: 600px) { .title { font-size: 4rem; } }
+
+.subtitle {
+  font-family: 'Caveat', cursive;
+  font-size: 1.3rem;
+  color: var(--pink-400);
+  margin-bottom: 2.5rem;
+}
+@media (min-width: 600px) { .subtitle { font-size: 1.8rem; } }
+
+/* POLAROID GALLERY */
+.polaroid-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2rem 1.5rem;
+  padding: 1rem;
+  justify-items: center;
+}
+
+.polaroid {
+  background: var(--white);
+  padding: 12px 12px 40px 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.06);
+  border-radius: 2px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 260px;
+}
+.polaroid:hover {
+  transform: scale(1.04) rotate(0deg) !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.08);
+}
+.polaroid img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  border-radius: 1px;
+  background: var(--pink-100);
+}
+.polaroid .caption {
+  font-family: 'Caveat', cursive;
+  font-size: 1.1rem;
+  color: var(--pink-600);
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* Cat GIF section */
+.cat-section {
+  margin-top: 2.5rem;
+  padding: 1rem;
+}
+.cat-section h3 {
+  font-family: 'Caveat', cursive;
+  font-size: 1.8rem;
+  color: var(--pink-500);
+  margin-bottom: 1.5rem;
+}
+@media (min-width: 600px) { .cat-section h3 { font-size: 2.2rem; } }
+
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+}
+.cat-polaroid {
+  background: var(--white);
+  padding: 10px 10px 30px 10px;
+  box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+  border-radius: 2px;
+}
+.cat-polaroid img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.footer-note {
+  margin-top: 3rem;
+  font-family: 'Caveat', cursive;
+  font-size: 1.5rem;
+  color: var(--pink-400);
+  animation: pulse 2s ease-in-out infinite;
+}
+@media (min-width: 600px) { .footer-note { font-size: 2rem; } }
+
+/* Confetti */
+.confetti {
+  position: fixed;
+  pointer-events: none;
+  z-index: 100;
+  animation: confettiFall 3s ease-out forwards;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- Floating sparkles -->
+<script>
+(function() {
+  const emojis = ['✨', '💕', '🌸', '🎀', '💗', '🩷', '⭐'];
+  for (let i = 0; i < 15; i++) {
+    const el = document.createElement('span');
+    el.className = 'sparkle';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = Math.random() * 100 + '%';
+    el.style.animationDelay = Math.random() * 6 + 's';
+    el.style.animationDuration = (4 + Math.random() * 6) + 's';
+    el.style.fontSize = (1 + Math.random() * 1.5) + 'rem';
+    document.body.appendChild(el);
+  }
+})();
+</script>
+
+<!-- ENVELOPE SCENE -->
+<div class="envelope-scene" id="envelopeScene">
+  <p class="envelope-hint">You've got birthday mail! Tap to open</p>
+  <div class="envelope" id="envelope">
+    <div class="envelope-body"></div>
+    <div class="envelope-flap"></div>
+    <div class="envelope-seal">💌</div>
+    <div class="envelope-front-lines"></div>
+    <div class="letter">Happy Birthday Wawa! 🎂<br>From all of us with love 💕</div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content" id="mainContent">
+  <h1 class="title">🎂 Happy Birthday, Wawa! 🎂</h1>
+  <p class="subtitle">A little gallery of wonderful memories just for you</p>
+
+  <div class="polaroid-grid" id="polaroidGrid">
+    <!-- Populated by JS -->
+  </div>
+
+  <div class="cat-section">
+    <h3>🐱 Cute Cats Say Happy Birthday! 🐱</h3>
+    <div class="cat-grid" id="catGrid">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <p class="footer-note">Made with love 💗 and lots of pink</p>
+</div>
+
+<script>
+// Photo data
+const photos = [
+  { src: 'foto/2475637f9b0e7efb33504e3b561bcd78_0.jpg', caption: 'Beautiful smile', rotate: -3 },
+  { src: 'foto/46a6f19fec8e0101c7f5f8348a4d3958_0.jpg', caption: 'Radiant', rotate: 2 },
+  { src: 'foto/8e3b70a8ff3579d0edee260fd322356c_0.jpg', caption: 'Gorgeous', rotate: -2 },
+  { src: 'foto/d2289932f3702c0241f448d57e1122f0_0.jpg', caption: 'Stunning', rotate: 4 },
+  { src: 'foto/f39b0ddb092f542b44cdaa6a8d71deaf_0.jpg', caption: 'Lovely', rotate: -1 },
+  { src: 'foto/Gemini_Generated_Image_hxn620hxn620hxn6.png', caption: 'Magical', rotate: 3 },
+  { src: 'foto/image.png', caption: 'Amazing', rotate: -4 },
+  { src: 'foto/MEITU_20260405_171051587-1383754971.jpg', caption: 'Wonderful', rotate: 2 },
+  { src: 'foto/rmw2vv0.png', caption: 'Fabulous', rotate: -2 },
+];
+
+const polaroidGrid = document.getElementById('polaroidGrid');
+photos.forEach((photo, i) => {
+  const div = document.createElement('div');
+  div.className = 'polaroid';
+  div.style.transform = `rotate(${photo.rotate}deg)`;
+  div.innerHTML = `
+    <img src="${photo.src}" alt="${photo.caption}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22266%22><rect fill=%22%23fce7f3%22 width=%22200%22 height=%22266%22/><text x=%22100%22 y=%22133%22 text-anchor=%22middle%22 fill=%22%23db2777%22 font-size=%2216%22 font-family=%22sans-serif%22>🌸</text></svg>'">
+    <span class="caption">${photo.caption}</span>
+  `;
+  polaroidGrid.appendChild(div);
+});
+
+// Cute cat GIFs from public sources
+const catGIFs = [
+  'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWxzZTBpNGJ6cXpubHkxaXRhb3RreDVzbTIzcG43a2Jtam5pM3c4MiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/VbnUQpnihPSIgIXuZv/giphy.gif',
+  'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmlrdjcxaDB1azFvZ3M4bzAza214MDRoNW83M3RlNnl4eWV5eG10eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/mlvseq9yvZhba/giphy.gif',
+  'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExeHp2aXRpZW9ibnBnczNyMmY5bGh6c2E3aG5nZXQ1NXYwMnVjcm1idCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/JIX9t2j0ZTN9S/giphy.gif',
+  'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGhpOXI4YzVoNDJtNmI5dGd4Ym9ndXM4djNxNjkyZXEwend0YmhqYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/13borq7Zo2kulO/giphy.gif',
+  'https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXIxbXZpdXNmcnVkZWlsMzNxN2gwbTVlOXV6cnZwN2k2bDRjN2ZxNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/cfuL5gqFDreXxkWQ4o/giphy.gif',
+  'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExODlyaDZmamxqanRlbmhud2oyM2xsbjAwM3F1emhwdGVudGVncm90aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ICOgUNjpvO0PC/giphy.gif',
+  'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDQxZ3hhdjN1bGxucDJtYWdvbG44eG5pdjc0dDM5a2U4bjFqM2l2eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif',
+  'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmpyazBhcHlhbGxkdjl5M2huazQzbnhybHQwbGx3aHJnaG5tNnRxNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/v6aOjy0Qo1fIA/giphy.gif',
+  'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExNzJjbWluNG5zcGI1cTBkZ3FzdWhrMW9obTN0eDRkOXUwZXQ5YTJjYiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oriO0OEd9QIDdllqo/giphy.gif',
+  'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcDB1MDR5MnpzZnZqOG91eWNkM2h0bjN1bXpqbDVmMDkyc25oanNnZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/nR4L10XlJcSeQ/giphy.gif',
+  'https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZGcxbHVkZjVqenVzc3QyZThqM2tjcXg2aWFpN3Q4NmVhZHJ4eTU0ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/BzyTuYCmvSORqs1ABM/giphy.gif',
+  'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExeXRjbGpvMnQ2MzJyd3VpMnEyaTFuY3AwcDEwaG0xbnM2Yml2amttdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aNqEFrYVnsS52/giphy.gif',
+];
+
+const catGrid = document.getElementById('catGrid');
+catGIFs.forEach((gif, i) => {
+  const div = document.createElement('div');
+  div.className = 'cat-polaroid';
+  div.style.animationDelay = (i * 0.1) + 's';
+  div.style.animation = `fadeInUp 0.5s ease forwards`;
+  div.style.opacity = '0';
+  div.style.animationDelay = (i * 0.08) + 's';
+  div.innerHTML = `<img src="${gif}" alt="Cute cat" loading="lazy">`;
+  catGrid.appendChild(div);
+});
+
+// Envelope opening logic
+const envelope = document.getElementById('envelope');
+const envelopeScene = document.getElementById('envelopeScene');
+const mainContent = document.getElementById('mainContent');
+let isOpen = false;
+
+function openEnvelope() {
+  if (isOpen) return;
+  isOpen = true;
+  envelope.classList.add('open');
+
+  // Confetti burst
+  spawnConfetti();
+
+  // Show main content after letter animation
+  setTimeout(() => {
+    envelopeScene.style.display = 'none';
+    mainContent.classList.add('revealed');
+  }, 1800);
+}
+
+envelope.addEventListener('click', openEnvelope);
+
+// Touch also
+envelope.addEventListener('touchend', function(e) {
+  e.preventDefault();
+  openEnvelope();
+});
+
+// Confetti
+function spawnConfetti() {
+  const colors = ['#f472b6', '#f9a8d4', '#fb923c', '#fbbf24', '#ec4899', '#a78bfa', '#fda4af'];
+  for (let i = 0; i < 60; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.left = Math.random() * 100 + '%';
+    confetti.style.top = -(5 + Math.random() * 10) + 'px';
+    confetti.style.width = (8 + Math.random() * 10) + 'px';
+    confetti.style.height = (6 + Math.random() * 14) + 'px';
+    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+    confetti.style.animationDuration = (2 + Math.random() * 3) + 's';
+    document.body.appendChild(confetti);
+
+    confetti.addEventListener('animationend', () => confetti.remove());
+  }
+}
+
+// Respect reduced motion
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+if (prefersReducedMotion.matches) {
+  document.querySelectorAll('.sparkle, .confetti, .envelope-hint').forEach(el => {
+    el.style.animation = 'none';
+    el.style.opacity = '0.5';
+  });
+}
+</script>
+</body>
+</html>
