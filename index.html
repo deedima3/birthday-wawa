@@ -375,7 +375,7 @@ photos.forEach((photo, i) => {
   div.className = 'polaroid';
   div.style.transform = `rotate(${photo.rotate}deg)`;
   div.innerHTML = `
-    <img src="${photo.src}" alt="${photo.caption}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22266%22><rect fill=%22%23fce7f3%22 width=%22200%22 height=%22266%22/><text x=%22100%22 y=%22133%22 text-anchor=%22middle%22 fill=%22%23db2777%22 font-size=%2216%22 font-family=%22sans-serif%22>🌸</text></svg>'">
+    <img src="${photo.src}" alt="${photo.caption}" loading="lazy" onerror="this.style.display='none'">
     <span class="caption">${photo.caption}</span>
   `;
   polaroidGrid.appendChild(div);
@@ -401,11 +401,7 @@ const catGrid = document.getElementById('catGrid');
 catGIFs.forEach((gif, i) => {
   const div = document.createElement('div');
   div.className = 'cat-polaroid';
-  div.style.animationDelay = (i * 0.1) + 's';
-  div.style.animation = `fadeInUp 0.5s ease forwards`;
-  div.style.opacity = '0';
-  div.style.animationDelay = (i * 0.08) + 's';
-  div.innerHTML = `<img src="${gif}" alt="Cute cat" loading="lazy">`;
+  div.innerHTML = `<img src="${gif}" alt="Cute cat" loading="lazy" onerror="this.style.display='none'" style="animation: fadeInUp 0.5s ease forwards; opacity: 0; animation-delay: ${i * 0.08}s;">`;
   catGrid.appendChild(div);
 });
 
