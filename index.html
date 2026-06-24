@@ -86,18 +86,6 @@ body {
 .envelope:hover { transform: scale(1.05); }
 @media (min-width: 600px) { .envelope { width: 380px; height: 260px; } }
 
-.envelope-body {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 65%;
-  background: linear-gradient(135deg, var(--pink-400), var(--pink-500));
-  border-radius: 0 0 12px 12px;
-  clip-path: polygon(0 0, 50% 28%, 100% 0, 100% 100%, 0 100%);
-  box-shadow: 0 8px 30px var(--shadow);
-}
-
 .envelope-flap {
   position: absolute;
   top: 0;
@@ -108,8 +96,24 @@ body {
   clip-path: polygon(0 0, 50% 100%, 100% 0);
   transform-origin: top center;
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 3;
+  z-index: 1;
   box-shadow: 0 4px 15px var(--shadow);
+}
+.envelope.open .envelope-flap {
+  transform: rotateX(180deg);
+}
+
+.envelope-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 65%;
+  background: linear-gradient(135deg, var(--pink-400), var(--pink-500));
+  border-radius: 0 0 12px 12px;
+  clip-path: polygon(0 0, 50% 28%, 100% 0, 100% 100%, 0 100%);
+  box-shadow: 0 8px 30px var(--shadow);
+  z-index: 3;
 }
 .envelope.open .envelope-flap {
   transform: rotateX(180deg);
@@ -144,7 +148,7 @@ body {
   left: 0;
   width: 100%;
   height: 65%;
-  z-index: 2;
+  z-index: 4;
   pointer-events: none;
 }
 .envelope-front-lines::before {
@@ -158,24 +162,30 @@ body {
   background: rgba(255,255,255,0.3);
 }
 
-/* MESSAGE ON ENVELOPE */
+/* SLIDING LETTER */
 .envelope-message {
   position: absolute;
-  top: 50%;
+  bottom: 15px;
   left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 4;
+  transform: translateX(-50%);
+  z-index: 2;
   font-family: 'Caveat', cursive;
-  font-size: 1.3rem;
-  color: var(--white);
+  font-size: 1.1rem;
+  color: var(--pink-800);
   text-align: center;
   line-height: 1.5;
   pointer-events: none;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.15);
   width: 80%;
-  transition: opacity 0.5s ease;
+  background: linear-gradient(135deg, #fffef9, #fff5f5);
+  border-radius: 6px;
+  padding: 0.9rem 0.8rem 3rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
 }
-@media (min-width: 600px) { .envelope-message { font-size: 1.6rem; } }
+.envelope.open .envelope-message {
+  transform: translateX(-50%) translateY(-110%);
+}
+@media (min-width: 600px) { .envelope-message { font-size: 1.4rem; padding: 1.2rem 1rem 3.5rem; bottom: 20px; } }
 
 /* MAIN CONTENT (revealed after envelope) */
 .main-content {
@@ -423,7 +433,7 @@ function openEnvelope() {
   setTimeout(() => {
     envelopeScene.style.display = 'none';
     mainContent.classList.add('revealed');
-  }, 1800);
+  }, 2200);
 }
 
 envelope.addEventListener('click', openEnvelope);
